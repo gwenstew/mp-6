@@ -1,15 +1,12 @@
 import { signIn, signOut } from "@/app/auth";
 import { Button } from "@mui/material";
 
-export function SignIn({
-    provider,
-    ...props
-  }: { provider?: string } & React.ComponentPropsWithRef<typeof Button>) {
+export function SignIn(props: React.ComponentPropsWithRef<typeof Button>) {
     return (
       <form
         action={async () => {
           "use server";
-          await signIn(provider);
+          await signIn("github");
         }}
       >
         <Button {...props} type="submit" variant="contained" color="primary">
