@@ -16,46 +16,39 @@ export const { handlers, auth, signIn, signOut } = NextAuth(
         ],
         basePath: "/auth",
         session: {
-            strategy: "jwt",
+            strategy: "database",
+            //session expiry
+            maxAge: 24 * 60 * 60,
         },
         callbacks: {
-            async jwt({ token, trigger, session, account, profile }) {
-                // When user initially signs in
-                if (account?.provider === "github" && profile) {
-                  token.id = profile.id; 
-                  token.name = profile.name; 
-                  token.email = profile.email; 
-                  //token.picture = profile.avatar_url; 
-                  token.accessToken = account.access_token; 
-                }
+            async session({ session, user }) {
+                session.user.id = user.id;
+                session.user.name = session.user.name;
+                session.user.email = session.user.email;
+                session.user.image = user.image;
             
-                //session updates
-                if (trigger === "update" && session?.user) {
-                  token.name = session.user.name;
-                }
-            
-                return token;
-            },
-            async session({ session, token }) {
-                if (token?.accessToken) {
-                    session.accessToken = token.accessToken;
-                }
                 return session;
             },
+            // async session({ session, token }) {
+            //     if (token?.accessToken) {
+            //         session.accessToken = token.accessToken;
+            //     }
+            //     return session;
+            // },
         },
 });
 
 
-declare module "next-auth" {
-    interface Session {
-      accessToken?: string
-    }
-  }
+// declare module "next-auth" {
+//     interface Session {
+//       accessToken?: string
+//     }
+//   }
   
-  declare module "next-auth/jwt" {
-    interface JWT {
-      accessToken?: string
-    }
-  }
+//   declare module "next-auth/jwt" {
+//     interface JWT {
+//       accessToken?: string
+//     }
+//   }
 
 
