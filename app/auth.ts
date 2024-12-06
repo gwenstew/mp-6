@@ -14,7 +14,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth(
                 clientSecret: process.env.GITHUB_SECRET!,
             }),
         ],
-        basePath: "/auth",
+        //basePath: "/auth",
         session: {
             strategy: "database",
             //session expiry
