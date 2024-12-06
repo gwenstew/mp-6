@@ -8,23 +8,18 @@ if (!MONGO_URI) {
 const DB_NAME = "cs391-OAuth";
 export const PROFILES = "profiles";
 
-let client: MongoClient | null = null;
+let client: MongoClient;
 let db: Db | null = null;
 
-async function connect(): Promise<Db> {
+async function connect(): Promise<MongoClient> {
     if (!client) {
         client = new MongoClient(MONGO_URI);
         await client.connect();
     }
-    return client.db(DB_NAME);
+    return client;
 }
+export {connect};
 
-export default async function getCollection(
-    collectionName: string,
-): Promise<Collection> {
-    if (!db) {
-        db = await connect();
-    }
+client = new MongoClient(MONGO_URI);
+export default client;
 
-    return db.collection(collectionName);
-}
